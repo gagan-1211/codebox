@@ -18,14 +18,21 @@ data = {"Name":[],"Store":[],"Best Price":[],"Link":[]}
 for product in res:
     if product["stock"] != "UPCOMING":
         data["Name"].append(product["name"])
-        data["Store"].append(product["bestStore"]["store"]["slug"])
+        if product["bestStore"] is not None and product["bestStore"]["store"] is not None:
+            data["Store"].append(product["bestStore"]["store"]["slug"])
+        else:
+            data["Store"].append("N/A")  # Provide a default value if the structure is not present
         data["Best Price"].append(product["price"])
-        data["Link"].append(product["bestStore"]["trackingLink"])
+        if product["bestStore"] is not None:
+            data["Link"].append(product["bestStore"]["trackingLink"])
+        else:
+            data["Link"].append("N/A")  # Provide a default value if the structure is not present
 
         data["Name"].append(" ")
         data["Store"].append(" ")
         data["Best Price"].append(" ")
         data["Link"].append(" ")
+
 
 df = pd.DataFrame(data)
 print(tabulate(df, showindex=False, headers=df.columns))
